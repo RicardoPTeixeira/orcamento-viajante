@@ -7,16 +7,16 @@ import {
 
 import './index.css'
 
-import Home from "./pages/home"
-import Login from "./pages/login"
-import AdicionarViagem from "./pages/adicionar-viagem"
-import CotacoesDinheiro from "./pages/cotacoes-dinheiro"
-import EscolhaViagem from "./pages/escolha-viagem"
-import Gastos from "./pages/gastos"
-import Limites from "./pages/limites"
-import Menu from "./pages/menu"
-import PlanejamentoGastos from "./pages/planejamento-gastos"
-import Relatorios from "./pages/relatorios"
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import AdicionarViagem from "./pages/AdicionarViagem"
+import CotacoesDinheiro from "./pages/CotacoesDinheiro"
+import EscolhaViagem from "./pages/EscolhaViagem"
+import Gastos from "./pages/Gastos"
+import Limites from "./pages/Limites"
+import Menu from "./pages/Menu"
+import PlanejamentoGastos from "./pages/PlanejamentoGastos"
+import Relatorios from "./pages/Relatorios"
 import Header from "./components/Header"
 
 const router = createBrowserRouter([
