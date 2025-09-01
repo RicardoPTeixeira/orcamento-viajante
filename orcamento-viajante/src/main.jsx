@@ -17,6 +17,7 @@ import Limites from "./pages/limites"
 import Menu from "./pages/menu"
 import PlanejamentoGastos from "./pages/planejamento-gastos"
 import Relatorios from "./pages/relatorios"
+import Header from "./components/Header"
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <Header />
     <RouterProvider router={router} />
   </StrictMode>,
 )

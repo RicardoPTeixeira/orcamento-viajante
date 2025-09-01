@@ -1,0 +1,20 @@
+.header {
+    background-color: #015C91;
+}
+
+.header .section {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    gap: 10px;
+}
+
+.header .section img {
+    width: 28px;
+    height: 28px;
+}
+
+.header .section h1 {
+    font-weight: 500;
+    color: #FFE39A;
+}
