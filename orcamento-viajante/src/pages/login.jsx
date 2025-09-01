@@ -4,7 +4,8 @@ function Login() {
 
   return (
     <>
-      Login
+    <section className='section'>Login</section>
+      
     </>
   )
 }
