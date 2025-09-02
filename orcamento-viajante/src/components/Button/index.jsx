@@ -3,7 +3,7 @@ import './button.css'
 function Button(infos) {
 
   return (
-    <button className='button'>{infos.texto}</button>
+    <button className='button' onClick={infos.onClick}>{infos.texto}</button>
   )
 }
 

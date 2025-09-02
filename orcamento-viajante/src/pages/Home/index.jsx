@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { auth } from '../../firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 
 function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

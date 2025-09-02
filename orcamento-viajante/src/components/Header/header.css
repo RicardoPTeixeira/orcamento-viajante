@@ -18,3 +18,13 @@
     font-weight: 500;
     color: #FFE39A;
 }
+
+.header .section .close {
+    background: none;
+    border: none;
+    margin-left: auto;
+}
+
+.header .section .close:hover {
+    cursor: pointer;
+}
