@@ -1,0 +1,33 @@
+.login {
+    background-color: #BCE5FF;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+}
+
+.login label {
+    margin-bottom: 5px;
+}
+
+.login input {
+    margin-bottom: 10px;
+}
+
+.login input:last-child {
+    margin-bottom: 15px;
+}
+
+.login .botoes {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+@media(min-width: 1024px) {
+    .login {
+        max-width: 400px;
+    }
+}
