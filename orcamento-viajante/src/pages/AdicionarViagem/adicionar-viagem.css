@@ -1,0 +1,16 @@
+.adicionarViagem {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 45px;
+}
+
+.adicionarViagem .inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.adicionarViagem .inputs label, .adicionarViagem .inputs input {
+    margin-bottom: 15px;
+}
+
