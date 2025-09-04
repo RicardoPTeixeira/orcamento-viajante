@@ -125,7 +125,7 @@ function AdicionarViagem() {
 
       // 2. Define o documento com os dados fornecidos
       await setDoc(viagemRef, dados);
-      window.location.href ='/menu?idTravel='+idViagem
+      window.location.href ='/planejamento-gastos?idTravel='+idViagem
 
     } catch (e) {
       console.error("Erro ao adicionar documento: ", e);
