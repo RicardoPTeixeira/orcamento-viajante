@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+
 import { db } from '../../firebase'
 import { collection, getDocs } from 'firebase/firestore';
 import { auth } from '../../firebase';
+
 import './escolha-viagem.css'
 import TravelSquare from '../../components/TravelSquare'
 
@@ -9,16 +11,20 @@ function EscolhaViagem() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { 
-    const fetchData = async () => {
-      // TODO fazer o email ser relativo com qual usuario esta logado
-      const querySnapshot = await getDocs(collection(db, "orcamento-viajante", "libra1ponciano@gmail.com", "viagens"));
+  
+
+  useEffect(() => {
+    const fetchData = async (usuarioLogado) => {
+      const querySnapshot = await getDocs(collection(db, "orcamento-viajante", usuarioLogado, "viagens"));
       const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setData(items);
       setLoading(false);
     };
 
-    fetchData();
+    const timer = setTimeout(() => {
+      const usuarioLogado = auth.currentUser.email;
+      fetchData(usuarioLogado);
+    }, 2000);
   }, []);
 
   function createNewTravel() {
@@ -29,7 +35,7 @@ function EscolhaViagem() {
   return (
     <section className='section escolhaViagem'>
       Bem vindo {auth.currentUser.email}
-      {data.map((dado) => <TravelSquare cidade={dado.cidade} pais={dado.pais}/>)}
+      {data.map((dado, index) => <TravelSquare cidade={dado.cidade} pais={dado.pais} index={index}/>)}
 
       <div className='addNewTravel' onClick={createNewTravel}>
         <span>
