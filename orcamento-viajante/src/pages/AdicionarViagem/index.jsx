@@ -14,6 +14,8 @@ function AdicionarViagem() {
 
   const [paisesOptions, setPaisesOptions] = useState([]);
   const [cidadesOptions, setCidadesOptions] = useState([]);
+  const [moedasOptions, setMoedasOptions] = useState([]);
+  const [paisSelecionado, setPaisSelecionado] = useState('');
 
   function getOptionsPaises() {
     const url = "http://api.geonames.org/countryInfoJSON?username=ricardopetepo ";
@@ -40,7 +42,7 @@ function AdicionarViagem() {
   }
 
   function getOptionsCidade(codigoPais) {
-    const url = `http://api.geonames.org/searchJSON?country=${codigoPais}&featureClass=P&username=ricardopetepo`;
+    const url = `http://api.geonames.org/searchJSON?country=${codigoPais}&featureClass=P&maxRows=1000&username=ricardopetepo`;
 
     fetch(url)
       .then(response => {
@@ -63,9 +65,25 @@ function AdicionarViagem() {
       });
   }
 
+  function getCodePaisSelecionado() {
+    paisesOptions.forEach(element => {
+      if(pais == element.countryName) {
+        setPaisSelecionado(element.countryCode)
+      }
+    });
+  }
+
   useEffect(() => {
     getOptionsPaises();
   }, []);
+
+  useEffect(() => {
+    getCodePaisSelecionado();
+  }, [pais]);
+
+  useEffect(() => {
+    getOptionsCidade(paisSelecionado);
+  }, [paisSelecionado]);
 
   return (
     <section className='section adicionarViagem'>
@@ -82,6 +100,7 @@ function AdicionarViagem() {
         <label htmlFor="pais">Selecione um país</label>
         <DataList
           listName="listaPaises"
+          tipo="paises"
           idInput="pais"
           nameInput="Pais"
           dadosLista={paisesOptions}
@@ -90,7 +109,15 @@ function AdicionarViagem() {
         />
   
         <label htmlFor="cidade">Selecione uma cidade</label>
-        {/* Fazer logica para pegar cidadess a partir do paiss selecionado */}
+        <DataList
+          listName="listaCidades"
+          tipo="cidades"
+          idInput="cidade"
+          nameInput="Cidade"
+          dadosLista={cidadesOptions}
+          valor={cidade}
+          onChange={(e) => setCidade(e.target.value)}
+        />
       </div>
 
       <div className='moedas'>

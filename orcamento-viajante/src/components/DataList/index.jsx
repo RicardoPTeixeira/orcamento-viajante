@@ -7,7 +7,12 @@ function DataList(infos) {
 
       <datalist id={infos.listName}>
         {infos.dadosLista.map((e) => {
-          return <option value={e.countryName}></option>
+          if(infos.tipo == 'paises') {
+            return <option value={e.countryName}></option>
+          } else {
+            return <option value={e.name}></option>
+          }
+          
         })}
       </datalist>
     </>
