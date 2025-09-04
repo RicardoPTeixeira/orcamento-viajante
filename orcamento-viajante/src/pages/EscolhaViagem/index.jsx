@@ -22,7 +22,7 @@ function EscolhaViagem() {
   }, []);
 
   function createNewTravel() {
-    window.location.href ='/adicionar-viagem?idTravel='+(data.length+1)
+    window.location.href ='/adicionar-viagem?idNewTravel='+(data.length+1)
   }
 
   if (loading) { return <div>Carregando...</div>; }

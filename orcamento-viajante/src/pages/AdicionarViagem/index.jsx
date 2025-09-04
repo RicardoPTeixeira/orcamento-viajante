@@ -1,4 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom';
+import { getAuth } from "firebase/auth";
+
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase"
 
 import Input from '../../components/Input'
 import DataList from '../../components/DataList'
@@ -101,6 +106,32 @@ function AdicionarViagem() {
     }
   };
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const auth = getAuth();
+  const usuarioLogado = auth.currentUser;
+
+  async function salvarViagemNoBanco() {
+    const usuario = usuarioLogado.email
+    const idViagem = "viagem-"+searchParams.get('idNewTravel');
+    const dados = {
+      duracao: duracao,
+      cidade: cidade,
+      pais: pais,
+      moedas: moedas
+    }
+
+    try {
+      const viagemRef = doc(db, 'orcamento-viajante', usuario, 'viagens', idViagem);
+
+      // 2. Define o documento com os dados fornecidos
+      await setDoc(viagemRef, dados);
+      window.location.href ='/menu?idTravel='+idViagem
+
+    } catch (e) {
+      console.error("Erro ao adicionar documento: ", e);
+    }
+  }
+
   useEffect(() => {
     getOptionsPaises();
   }, []);
@@ -196,6 +227,8 @@ function AdicionarViagem() {
           return <p>{e}</p>
         })}
       </div>
+
+      <Button texto="Adicionar" onClick={salvarViagemNoBanco}/>
     </section>
   )
 }
