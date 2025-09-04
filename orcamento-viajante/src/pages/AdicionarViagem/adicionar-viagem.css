@@ -10,7 +10,60 @@
     flex-direction: column;
 }
 
-.adicionarViagem .inputs label, .adicionarViagem .inputs input {
+.adicionarViagem .inputs input {
+    background-color: #BCE5FF;
+}
+
+.adicionarViagem .inputs label, .adicionarViagem .inputs input, .adicionarViagem .inputs p {
     margin-bottom: 15px;
 }
 
+.adicionarViagem .inputs label {
+    cursor: pointer;
+}
+
+.adicionarViagem .inputs .listaMoedasSection {
+    position: relative;
+    width: 100%;
+    background-color: #BCE5FF;
+    border-radius: 15px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.adicionarViagem .inputs .listaMoedasSection .listaMoedas {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 35px;
+    background-color: #8D8D8D;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 500px;
+    overflow-y: auto;
+}
+
+.adicionarViagem .inputs .listaMoedasSection .listaMoedasActive {
+    display: flex;
+}
+
+.adicionarViagem .inputs .listaMoedasSection .listaMoedas label {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    color: #FFFFFF;
+}
+
+.adicionarViagem .moedas {
+    background-color: #D9D9D9;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.invisible {
+    display: none;
+}

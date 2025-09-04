@@ -17,6 +17,8 @@ function AdicionarViagem() {
   const [moedasOptions, setMoedasOptions] = useState([]);
   const [paisSelecionado, setPaisSelecionado] = useState('');
 
+  const [selectMoedasAberto, setSelectMoedasAberto] = useState(false);
+
   function getOptionsPaises() {
     const url = "http://api.geonames.org/countryInfoJSON?username=ricardopetepo ";
 
@@ -65,6 +67,23 @@ function AdicionarViagem() {
       });
   }
 
+  function getMoedas() {
+    const allCurrencies = paisesOptions.map(country => country.currencyCode);
+    const uniqueCurrencies = [...new Set(allCurrencies)];
+    uniqueCurrencies.sort()
+    setMoedasOptions(uniqueCurrencies)
+  }
+
+  function getMoedaPaisSelecionado() {
+    paisesOptions.forEach(element => {
+      if(pais == element.countryName) {
+        const moeda = []
+        moeda.push(element.currencyCode)
+        setMoedas(moeda)
+      }
+    });
+  }
+
   function getCodePaisSelecionado() {
     paisesOptions.forEach(element => {
       if(pais == element.countryName) {
@@ -73,9 +92,22 @@ function AdicionarViagem() {
     });
   }
 
+  const handleCheckboxChange = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setMoedas([...moedas, value]);
+    } else {
+      setMoedas(moedas.filter((item) => item !== value));
+    }
+  };
+
   useEffect(() => {
     getOptionsPaises();
   }, []);
+
+  useEffect(() => {
+    getMoedas();
+  }, [paisesOptions]);
 
   useEffect(() => {
     getCodePaisSelecionado();
@@ -83,6 +115,7 @@ function AdicionarViagem() {
 
   useEffect(() => {
     getOptionsCidade(paisSelecionado);
+    getMoedaPaisSelecionado()
   }, [paisSelecionado]);
 
   return (
@@ -118,10 +151,50 @@ function AdicionarViagem() {
           valor={cidade}
           onChange={(e) => setCidade(e.target.value)}
         />
+
+        <p>Selecione uma nova moeda</p>
+        <div className="listaMoedasSection"
+          onClick={() => {
+            if(!selectMoedasAberto) {
+              setSelectMoedasAberto(true)
+            } else {
+              setSelectMoedasAberto(false)
+            }
+          }}
+        >
+          <div className={selectMoedasAberto ? "listaMoedas listaMoedasActive" : "listaMoedas" }>
+            {moedasOptions.map((e) => (
+              <label key={e}>
+                <input
+                  type="checkbox"
+                  name="pais"
+                  className='invisible'
+                  value={e}
+                  checked={moedas.includes(e)}
+                  onChange={handleCheckboxChange}
+                />
+                <span>{e}</span>
+                {/* fazer logica do pin de check */}
+                <span>
+                  {moedas.includes(e) ?
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0096 0.75789C13.4001 1.14841 13.4001 1.78158 13.0096 2.1721L5.93962 9.2421C5.75208 9.42964 5.49773 9.535 5.23251 9.535C4.96729 9.535 4.71294 9.42964 4.5254 9.2421L0.990403 5.7071C0.599879 5.31658 0.599879 4.68341 0.990403 4.29289C1.38093 3.90237 2.01409 3.90237 2.40462 4.29289L5.23251 7.12078L11.5954 0.75789C11.9859 0.367365 12.6191 0.367365 13.0096 0.75789Z" fill="white"/>
+                    </svg>
+
+                  :
+                    ''
+                  }
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className='moedas'>
-        moedasss
+        {moedas.map((e) => {
+          return <p>{e}</p>
+        })}
       </div>
     </section>
   )
