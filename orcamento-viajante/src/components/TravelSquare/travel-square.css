@@ -3,7 +3,7 @@
     border-radius: 15px;
     border: none;
     padding: 15px;
-    background-color: rgba(44, 130, 181, 50);
+    background-color: rgba(44, 130, 181, .5);
     color: #000000;
     position: relative;
     height: 100px;

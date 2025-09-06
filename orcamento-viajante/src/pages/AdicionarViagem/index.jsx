@@ -205,7 +205,6 @@ function AdicionarViagem() {
                   onChange={handleCheckboxChange}
                 />
                 <span>{e}</span>
-                {/* fazer logica do pin de check */}
                 <span>
                   {moedas.includes(e) ?
                     <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">

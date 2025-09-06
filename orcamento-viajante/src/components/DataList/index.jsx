@@ -9,8 +9,10 @@ function DataList(infos) {
         {infos.dadosLista.map((e) => {
           if(infos.tipo == 'paises') {
             return <option value={e.countryName}></option>
-          } else {
+          } else if (infos.tipo == 'cidades'){
             return <option value={e.name}></option>
+          } else {
+            return <option value={e}></option>
           }
           
         })}
