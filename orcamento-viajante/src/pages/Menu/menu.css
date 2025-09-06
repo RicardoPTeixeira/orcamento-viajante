@@ -1,0 +1,6 @@
+.menu {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 15px;
+    margin-top: 50px;
+}
