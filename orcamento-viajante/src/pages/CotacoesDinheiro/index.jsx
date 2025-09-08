@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom';
 
 import { db } from '../../firebase'
-import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { auth } from '../../firebase';
 
 import Button from "../../components/Button"
@@ -26,6 +26,38 @@ function CotacoesDinheiro() {
   const [valor1Compra, setValor1Compra] = useState(0);
   const [moeda2Compra, setMoeda2Compra] = useState('');
   const [valor2Compra, setValor2Compra] = useState(0);
+  // --
+
+  // Pegar compras de moedas
+  const [dataComprasDinheiro, setDataComprasDinheiro] = useState([]);
+  const [totalPorMoeda, setTotalPorMoeda] = useState([]);
+
+  useEffect(() => {
+    const totaisAcumulados = {};
+    moedas.forEach(moeda => {
+      totaisAcumulados[moeda] = 0;
+    });
+
+    dataComprasDinheiro.forEach(compra => {
+      const moeda = compra.moedaComprada;
+      const valor = parseFloat(compra.valorMoedaComprada);
+
+      if (totaisAcumulados[moeda]) {
+        totaisAcumulados[moeda] += valor;
+      } else {
+        totaisAcumulados[moeda] = valor;
+      }
+    });
+
+    const resultadoFinal = Object.keys(totaisAcumulados).map(moeda => ({
+      moeda: moeda,
+      total: totaisAcumulados[moeda]
+    }));
+
+    setTotalPorMoeda(resultadoFinal)
+
+  }, [dataComprasDinheiro]);
+
   // --
 
   const [selectMoedasAberto, setSelectMoedasAberto] = useState(false);
@@ -144,16 +176,13 @@ function CotacoesDinheiro() {
       valorMoedaComprada: valor2Compra
     }
 
-    // TODO: fazer ser dinamico
-    const idCompra = "compra-1"
-
+    const idCompra = "compra-"+(dataComprasDinheiro.length+1)
     const usuarioLogado = auth.currentUser.email;
-    console.log(usuarioLogado)
     try {
       const compraRef = doc( db, 'orcamento-viajante', usuarioLogado, 'viagens', idTravel, 'dinheiro-fisico', idCompra);
       await setDoc(compraRef, newDinheiro);
       setModalDinheiro(false)
-      
+      fetchDataCompraMoedas()
     } catch (e) {
       console.error("Erro ao adicionar documento:", e);
     }
@@ -171,6 +200,21 @@ function CotacoesDinheiro() {
       console.error("Erro ao atualizar documento:", e);
     }
   }
+
+  const fetchDataCompraMoedas = async () => {
+    try {
+      const dinheiroFisicoRef  = collection(db, 'orcamento-viajante', auth.currentUser.email, 'viagens', idTravel, 'dinheiro-fisico');
+      const querySnapshot = await getDocs(dinheiroFisicoRef);
+
+      const compras = [];
+      querySnapshot.forEach((doc) => {
+        compras.push({ id: doc.id, ...doc.data() });
+      });
+      setDataComprasDinheiro(compras)
+    } catch (e) {
+      console.error("Erro ao buscar compras de dinheiro:", e);
+    }
+  };
 
   useEffect(() => {
     const fetchDataMoedas = async (usuarioLogado) => {
@@ -194,6 +238,7 @@ function CotacoesDinheiro() {
     const timer = setTimeout(() => {
       const usuarioLogado = auth.currentUser.email;
       fetchDataMoedas(usuarioLogado);
+      fetchDataCompraMoedas();
     }, 2000);
   }, []);
 
@@ -245,8 +290,8 @@ function CotacoesDinheiro() {
             <p>Dinheiro fisico:</p>
 
             <div className='moedas'>
-              {moedas.map((e) => {
-                return <CoinBoxAmount nome={e}  />
+              {totalPorMoeda.map((e) => {
+                return <CoinBoxAmount nome={e.moeda} total={e.total} />
               })}
             </div>
           </div>

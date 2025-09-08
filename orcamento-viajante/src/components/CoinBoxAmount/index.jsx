@@ -6,7 +6,8 @@ function CoinBoxAmount(infos) {
   return (
     <div className='coinBoxAmount'>
       <span className='imagem'></span>
-      {infos.nome}
+      <p>{infos.nome}</p>
+      <p className='quantidade'>{infos.total}</p>
     </div>
   )
 }
