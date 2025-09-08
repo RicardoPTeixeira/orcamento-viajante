@@ -16,6 +16,10 @@ function Header() {
     });
   }
 
+  function handleClickLogo() {
+    window.location.href = "/"
+  }
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -33,7 +37,7 @@ function Header() {
   return (
     <section className='header'>
       <section className='section'>
-        <img src={logo} alt="Logo Orçamento Viajante" />
+        <img src={logo} alt="Logo Orçamento Viajante" onClick={handleClickLogo} />
         <h1>Orçamento Viajante</h1>
         {isAuthenticated ?
           <button className='close' onClick={signOutUser} >

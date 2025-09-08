@@ -12,6 +12,7 @@
 .header .section img {
     width: 28px;
     height: 28px;
+    cursor: pointer;
 }
 
 .header .section h1 {
