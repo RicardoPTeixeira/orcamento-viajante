@@ -21,7 +21,7 @@ function Home() {
 
   return (
     <>
-      {isAuthenticated ? "true" : "false"}
+      Carregando...
     </>
   )
 }
