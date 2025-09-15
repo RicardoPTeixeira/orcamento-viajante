@@ -1,0 +1,68 @@
+.limites {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+.limites .numbers {
+    display: flex;
+    margin: 0 0 10px;
+}
+
+.limites .numbers .normal {
+    background-color: #039D15;
+}
+
+.limites .numbers .warning {
+    background-color: #A29C00;
+}
+
+.limites .numbers .limit {
+    background-color: #9D2203;
+}   
+
+.limites .numbers .gasto, .limites .numbers .limiteTotal {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    width: 50%;
+    color: #F8F3EA;
+}
+
+.limites .numbers .gasto {
+    border-radius: 15px 0 0 15px;
+}
+
+.limites .numbers .limiteTotal {
+    background-color: #2C82B5;
+    border-radius: 0 15px 15px 0;
+}
+
+.limites .numbers .gasto .value, .limites .numbers .limiteTotal .value {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.limites .numbers .gasto .value p:nth-child(1), .limites .numbers .limiteTotal .value p:nth-child(1){
+    font-size: 12px;
+}
+
+.limites .numbers .gasto .value p:nth-child(2), .limites .numbers .limiteTotal .value p:nth-child(2){
+    font-size: 24px;
+}
+
+.limites .inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.limites .inputs label {
+    margin: 0 0 15px;
+}
+
+.limites .inputs input {
+    margin: 0 0 30px;
+    background-color: #BCE5FF;
+}
