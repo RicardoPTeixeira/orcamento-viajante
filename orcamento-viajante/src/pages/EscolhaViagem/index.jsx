@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import { db } from '../../firebase'
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { auth } from '../../firebase';
 
 import './escolha-viagem.css'
@@ -10,8 +10,7 @@ import TravelSquare from '../../components/TravelSquare'
 function EscolhaViagem() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  
+  const [nomeUser, setNomeUser] = useState('');
 
   useEffect(() => {
     const fetchData = async (usuarioLogado) => {
@@ -21,9 +20,25 @@ function EscolhaViagem() {
       setLoading(false);
     };
 
+    const pegarNomeDoUsuario = async(userEmail) => {
+      try {
+        const usuarioRef = doc(db, 'orcamento-viajante', userEmail);
+        const docSnap = await getDoc(usuarioRef);
+
+        if (docSnap.exists()) {
+          const dadosDoUsuario = docSnap.data();
+          const nomeDoUsuario = dadosDoUsuario.nome;
+          setNomeUser(nomeDoUsuario)
+        }
+      } catch (e) {
+        console.error("Erro ao buscar o documento:", e);
+      }
+    }
+
     const timer = setTimeout(() => {
       const usuarioLogado = auth.currentUser.email;
       fetchData(usuarioLogado);
+      pegarNomeDoUsuario(usuarioLogado);
     }, 2000);
   }, []);
 
@@ -34,7 +49,7 @@ function EscolhaViagem() {
   if (loading) { return <div>Carregando...</div>; }
   return (
     <section className='section escolhaViagem'>
-      Bem vindo {auth.currentUser.email}
+      Bem vindo {nomeUser}
       {data.map((dado, index) => <TravelSquare cidade={dado.cidade} pais={dado.pais} index={index}/>)}
 
       <div className='addNewTravel' onClick={createNewTravel}>

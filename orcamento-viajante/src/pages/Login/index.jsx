@@ -12,6 +12,7 @@ function Login() {
   const auth = getAuth();
   const [isLogin, setIslogin] = useState(true);
   const [email, setEmail] = useState('');
+  const [nome, setNome] = useState('');
   const [passsword, setPassword] = useState('');
 
   function handleSubmit(e) {
@@ -19,7 +20,7 @@ function Login() {
     if (isLogin) {
       login(email, passsword);
     } else {
-      criarUsuario(email, passsword);
+      criarUsuario(email, nome, passsword);
     }
   }
 
@@ -31,12 +32,11 @@ function Login() {
     }
   }
 
-  async function criarUsuarioBanco(email) {
+  async function criarUsuarioBanco(email, nome) {
     try {
-      // 1. Constrói a referência para o documento 'usuario1'
       const usuarioRef = doc(db, 'orcamento-viajante', email);
 
-      await setDoc(usuarioRef, {});
+      await setDoc(usuarioRef, {nome: nome});
       window.location.href ='/'
 
     } catch (e) {
@@ -44,13 +44,13 @@ function Login() {
     }
   }
 
-  function criarUsuario(email, password) {
+  function criarUsuario(email, nome, password) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Usuário criado e logado com sucesso
         const user = userCredential.user;
         console.log("Usuário criado:", user);
-        criarUsuarioBanco(email)
+        criarUsuarioBanco(email, nome)
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -76,6 +76,21 @@ function Login() {
 
   return (
     <section className='section login'>
+      {!isLogin ?
+        <>
+          <label htmlFor="nome">Nome</label>
+          <Input
+            tipoInput='text'
+            idInput='nome'
+            nameInput='Nome'
+            valor={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+        </>
+      :
+        <></>
+      }
+
       <label htmlFor="email">E-mail</label>
       <Input
         tipoInput='email'
@@ -95,8 +110,8 @@ function Login() {
       />
 
       <div className='botoes'>
-        <Button texto={isLogin ? 'Login' : 'Cadastrar'} onClick={handleSubmit}/>
-        <Button texto={isLogin ? 'Cadastre-se' : 'Logar'} onClick={changeLoginCadastro}/>
+        <Button texto={isLogin ? 'Logar' : 'Cadastrar'} onClick={handleSubmit}/>
+        <Button texto={isLogin ? 'Cadastre-se' : 'Tenho cadastro'} onClick={changeLoginCadastro}/>
       </div>
     </section>
   )
