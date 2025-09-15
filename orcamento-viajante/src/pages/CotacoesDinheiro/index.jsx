@@ -169,23 +169,26 @@ function CotacoesDinheiro() {
   }
 
   async function createCompraDinheiro() {
-    const newDinheiro = {
-      data: dataCompra,
-      valorBRL: valor1Compra,
-      moedaComprada: moeda2Compra,
-      valorMoedaComprada: valor2Compra
-    }
+    if(moeda2Compra != '' && valor1Compra != 0 && valor2Compra !=0) {
+      const newDinheiro = {
+        data: dataCompra,
+        valorBRL: valor1Compra,
+        moedaComprada: moeda2Compra,
+        valorMoedaComprada: valor2Compra
+      }
 
-    const idCompra = "compra-"+(dataComprasDinheiro.length+1)
-    const usuarioLogado = auth.currentUser.email;
-    try {
-      const compraRef = doc( db, 'orcamento-viajante', usuarioLogado, 'viagens', idTravel, 'dinheiro-fisico', idCompra);
-      await setDoc(compraRef, newDinheiro);
-      setModalDinheiro(false)
-      fetchDataCompraMoedas()
-    } catch (e) {
-      console.error("Erro ao adicionar documento:", e);
+      const idCompra = "compra-"+(dataComprasDinheiro.length+1)
+      const usuarioLogado = auth.currentUser.email;
+      try {
+        const compraRef = doc( db, 'orcamento-viajante', usuarioLogado, 'viagens', idTravel, 'dinheiro-fisico', idCompra);
+        await setDoc(compraRef, newDinheiro);
+        setModalDinheiro(false)
+        fetchDataCompraMoedas()
+      } catch (e) {
+        console.error("Erro ao adicionar documento:", e);
+      }
     }
+    
   }
 
   async function atualizarMoedasBanco(usuarioLogado, novasMoedas) {
