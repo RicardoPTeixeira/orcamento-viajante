@@ -1,0 +1,23 @@
+.limite-gastos {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+.limite-gastos .inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.limite-gastos .inputs label {
+    margin: 0 0 15px;
+}
+
+.limite-gastos .inputs input {
+    margin: 0 0 30px;
+    background-color: #BCE5FF;
+}
+
+.limite-gastos .inputs #gastoTotal {
+    background-color: #FFE39A;
+}
