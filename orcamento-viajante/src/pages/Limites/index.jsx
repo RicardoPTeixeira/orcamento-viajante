@@ -6,6 +6,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
+import ProgressBar from '../../components/ProgressBar'
 
 import './limites.css'
 
@@ -22,8 +23,9 @@ function Limites() {
   const [souvenirs, setSouvenirs] = useState(0);
   const [limiteTotal, setLimiteTotal] = useState(0);
 
-  const [totalGasto, setTotalGasto] = useState(0);
+  const [totalGasto, setTotalGasto] = useState(130);
   const [statusGasto, setStatusGasto] = useState('normal')
+  const [porcentagemGasta, setPorcentagemGasta] = useState(0)
 
   async function criarOuAtualizarDocumento(viagemId, total) {
     const dadosLimites = {
@@ -52,6 +54,11 @@ function Limites() {
     const soma = Number(passagens) + Number(hospedagem) + Number(alimentacao) + Number(passeios) + Number(transporte) + Number(souvenirs)
     setLimiteTotal(soma)
     criarOuAtualizarDocumento(idTravel, soma)
+    
+    const porcentagemGasta = soma > 0
+    ? (totalGasto / soma) * 100
+    : 0;
+    setPorcentagemGasta(porcentagemGasta)
 
     if(totalGasto <= (soma/2)) {
       setStatusGasto('normal')
@@ -77,6 +84,11 @@ function Limites() {
           setTransporte(dadosDaViagem.transporte)
           setSouvenirs(dadosDaViagem.souvenirs)
           setLimiteTotal(dadosDaViagem.limiteTotal)
+
+          const porcentagemGasta = dadosDaViagem.limiteTotal > 0
+          ? (totalGasto / dadosDaViagem.limiteTotal) * 100
+          : 0;
+          setPorcentagemGasta(porcentagemGasta)
 
           if(totalGasto <= (dadosDaViagem.limiteTotal/2)) {
             setStatusGasto('normal')
@@ -122,6 +134,7 @@ function Limites() {
           </div>
         </div>
       </div>
+      <ProgressBar progresso={porcentagemGasta} />
 
       <div className='inputs'>
         <div></div>
