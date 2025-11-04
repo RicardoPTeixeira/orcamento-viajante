@@ -1,0 +1,39 @@
+.gastoCard {
+    display: flex;
+    background-color: #2C82B5;
+    border-radius: 15px;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.gastoCard .separation {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.gastoCard .separation:first-child {
+    gap: 18px;
+}
+
+.gastoCard .separation:last-child {
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.gastoCard .separation:last-child .moedas {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.gastoCard .separation:last-child span svg {
+    width: 50px;
+}
+
+.gastoCard .separation p {
+    color: #F8F3EA;
+    font-size: 16px;
+}
