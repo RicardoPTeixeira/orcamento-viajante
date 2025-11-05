@@ -43,7 +43,7 @@ function EscolhaViagem() {
   }, []);
 
   function createNewTravel() {
-    window.location.href ='/adicionar-viagem?idNewTravel='+(data.length+1)
+    window.location.href = data.length < 9 ? '/adicionar-viagem?idNewTravel=0'+(data.length+1) : '/adicionar-viagem?idNewTravel='+(data.length+1)
   }
 
   if (loading) { return <div>Carregando...</div>; }

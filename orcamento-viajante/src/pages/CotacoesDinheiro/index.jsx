@@ -177,7 +177,7 @@ function CotacoesDinheiro() {
         valorMoedaComprada: valor2Compra
       }
 
-      const idCompra = "compra-"+(dataComprasDinheiro.length+1)
+      const idCompra = dataComprasDinheiro.length < 9 ? "compra-0"+(dataComprasDinheiro.length+1) : "compra-"+(dataComprasDinheiro.length+1)
       const usuarioLogado = auth.currentUser.email;
       try {
         const compraRef = doc( db, 'orcamento-viajante', usuarioLogado, 'viagens', idTravel, 'dinheiro-fisico', idCompra);
