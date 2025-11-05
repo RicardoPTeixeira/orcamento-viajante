@@ -7,6 +7,7 @@ import { doc, setDoc, getDoc, getDocs, collection } from 'firebase/firestore';
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 import GastoCard from '../../components/GastoCard'
+import DataList from '../../components/DataList'
 
 import './gastos.css'
 
@@ -21,11 +22,58 @@ function Gastos() {
   const [metodoGasto, setMetodoGasto] = useState('')
   const [categoriaGasto, setCategoriaGasto] = useState('')
   const [descricaoGasto, setDescricaoGasto] = useState('')
-  const [valorGasto, setValorGasto] = useState('')
   const [moedaGasto, setMoedaGasto] = useState('')
+  const [valorGasto, setValorGasto] = useState('')
+  const [valorGastoBRL, setValorGastoBRL] = useState('')
+  const [liberarValor, setLiberarValor] = useState(true)
+
+  const [moedas, setMoedas] = useState([]);
+  const [allCotacoes, setAllCotacoes] = useState([]);
+  const [cotacoesUser, setCotacoesUser] = useState([]);
 
   // Pegar gastos
   const [dataGastos, setDataGastos] = useState([]);
+
+  function getCotaoes() {
+    const apiKey = "cur_live_OWwhPwURgNjvydtwmlQqCtW5R2RhAxGPR8ld7gHQ"; // Pegue sua chave no site do currencyapi
+    const baseCurrency = "BRL";
+
+    const url = `https://api.currencyapi.com/v3/latest?apikey=${apiKey}&base_currency=${baseCurrency}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na requisição: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Acessa os dados de cotação
+        const rates = data.data;
+        setAllCotacoes(rates)
+      })
+      .catch(error => {
+        console.error("Ocorreu um erro:", error);
+      });
+  }
+
+  function getCotacoesUser() {
+    moedas.map((e) => {
+      const novaCotacao = {
+        moeda: e,
+        valorEmReal: 1 / allCotacoes[e].value
+      };
+      setCotacoesUser(prevCotacoes => {
+          const itemExistente = prevCotacoes.find(
+              (item) => item.moeda === novaCotacao.moeda
+          );
+          if (!itemExistente) {
+              return [...prevCotacoes, novaCotacao];
+          }
+          return prevCotacoes;
+      });
+    })
+  }
 
   function resetCampos() {
     setTituloGasto('')
@@ -45,6 +93,7 @@ function Gastos() {
       categoria: categoriaGasto,
       descricao: descricaoGasto,
       valor: valorGasto,
+      valorBRL: valorGastoBRL,
       moeda: moedaGasto,
     };
 
@@ -99,6 +148,56 @@ function Gastos() {
     }
   }
 
+  useEffect(() => {
+    const fetchDataMoedas = async (usuarioLogado) => {
+      try {
+        const viagemRef = doc(db, 'orcamento-viajante', usuarioLogado, 'viagens', idTravel);
+        const docSnap = await getDoc(viagemRef);
+
+        if (docSnap.exists()) {
+          setMoedas(docSnap.data().moedas);
+        } else {
+          console.log("Nenhum documento encontrado!");
+          return null;
+        }
+      } catch (e) {
+        console.error("Erro ao buscar documento:", e);
+      }
+      
+    };
+
+    const timer = setTimeout(() => {
+      const usuarioLogado = auth.currentUser.email;
+      fetchDataMoedas(usuarioLogado);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    getCotaoes();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getCotacoesUser();
+    }, 2000);
+  }, [moedas]);
+
+  useEffect(() => {
+    if(moedaGasto != '') {
+      setLiberarValor(false)
+    } else {
+      setLiberarValor(true)
+    }
+  }, [moedaGasto]);
+
+  useEffect(() => {
+    if(valorGasto != '') {
+      var objetoMoeda = cotacoesUser.find(item => item.moeda === moedaGasto);
+      var valorEmBRL = (valorGasto*objetoMoeda.valorEmReal).toFixed(2)
+      setValorGastoBRL(valorEmBRL)
+    }
+  }, [valorGasto]);
+
   if (loading) { return <div>Carregando...</div>; }
 
   return (
@@ -106,7 +205,7 @@ function Gastos() {
       <section className='section gastos'>
         <div className='cardsSections'>
           {dataGastos.map((e) => {
-            return <GastoCard titulo={e.titulo} categoria={e.categoria} data={e.data} tipo={e.metodo} valorMoeda1={e.valor} moeda1={e.moeda} valorMoeda2="60" moeda2="BRL" />
+            return <GastoCard titulo={e.titulo} categoria={e.categoria} data={e.data} tipo={e.metodo} valorMoeda1={e.valor} moeda1={e.moeda} valorMoeda2={e.valorBRL} moeda2="BRL" />
           })}
         </div>
         <Button texto="Adicionar" onClick={handleClickModal} />
@@ -139,10 +238,12 @@ function Gastos() {
 
               <div className='formInputDiv'>
                 <label htmlFor="metodoGasto">Metodo</label>
-                <Input
-                  tipoInput='text'
-                  idInput='metodoGasto'
-                  nameInput='Metodo Gasto'
+                <DataList
+                  listName="listaMetodos"
+                  tipo=""
+                  idInput="metodoGasto"
+                  nameInput="Metodo Gasto"
+                  dadosLista={["Dinheiro", "Cartao"]}
                   valor={metodoGasto}
                   onChange={(e) => setMetodoGasto(e.target.value)}
                 />
@@ -152,10 +253,12 @@ function Gastos() {
             <div className='formRow'>
               <div className='formInputDiv'>
                 <label htmlFor="categoriaGasto">Categoria</label>
-                <Input
-                  tipoInput='text'
-                  idInput='categoriaGasto'
-                  nameInput='Categoria Gasto'
+                <DataList
+                  listName="listaCategorias"
+                  tipo=""
+                  idInput="categoriaGasto"
+                  nameInput="Categoria Gasto"
+                  dadosLista={["Alimentação", "Hospedagem", "Passagens", "Passeios", "Souvenirs", "Transporte"]}
                   valor={categoriaGasto}
                   onChange={(e) => setCategoriaGasto(e.target.value)}
                 />
@@ -177,24 +280,27 @@ function Gastos() {
 
             <div className='formRow'>
               <div className='formInputDiv'>
-                <label htmlFor="valorGasto">Valor</label>
-                <Input
-                  tipoInput='text'
-                  idInput='valorGasto'
-                  nameInput='Valor Gasto'
-                  valor={valorGasto}
-                  onChange={(e) => setValorGasto(e.target.value)}
+                <label htmlFor="moedaGasto">Moeda</label>
+                <DataList
+                  listName="listaMoedas"
+                  tipo="moedasGasto"
+                  idInput='moedaGasto'
+                  nameInput='Moeda Gasto'
+                  dadosLista={cotacoesUser}
+                  valor={moedaGasto}
+                  onChange={(e) => setMoedaGasto(e.target.value)}
                 />
               </div>
 
               <div className='formInputDiv'>
-                <label htmlFor="moedaGasto">Moeda</label>
+                <label htmlFor="valorGasto">Valor</label>
                 <Input
-                  tipoInput='text'
-                  idInput='moedaGasto'
-                  nameInput='Moeda Gasto'
-                  valor={moedaGasto}
-                  onChange={(e) => setMoedaGasto(e.target.value)}
+                  tipoInput='number'
+                  idInput='valorGasto'
+                  nameInput='Valor Gasto'
+                  valor={valorGasto}
+                  onChange={(e) => setValorGasto(e.target.value)}
+                  isDisabled={liberarValor}
                 />
               </div>
             </div>
@@ -219,10 +325,10 @@ function Gastos() {
           <div className='form'>
             <div className='formRow'>
               <div className='formInputDiv'>
-                <label htmlFor="tituloGasto">Titulo</label>
+                <label htmlFor="tituloGastoo">Titulo</label>
                 <Input
                   tipoInput='text'
-                  idInput='tituloGasto'
+                  idInput='tituloGastoo'
                   nameInput='Titulo Gasto'
                   valor={tituloGasto}
                   onChange={(e) => setTituloGasto(e.target.value)}
@@ -232,10 +338,10 @@ function Gastos() {
 
             <div className='formRow'>
               <div className='formInputDiv'>
-                <label htmlFor="dataGasto">Data</label>
+                <label htmlFor="dataGastoo">Data</label>
                 <Input
                   tipoInput='date'
-                  idInput='dataGasto'
+                  idInput='dataGastoo'
                   nameInput='Data Gasto'
                   valor={dataGasto}
                   onChange={(e) => setDataGasto(e.target.value)}
@@ -243,11 +349,13 @@ function Gastos() {
               </div>
 
               <div className='formInputDiv'>
-                <label htmlFor="metodoGasto">Metodo</label>
-                <Input
-                  tipoInput='text'
-                  idInput='metodoGasto'
-                  nameInput='Metodo Gasto'
+                <label htmlFor="metodoGastoo">Metodo</label>
+                <DataList
+                  listName="listaMetodos"
+                  tipo=""
+                  idInput="metodoGastoo"
+                  nameInput="Metodo Gasto"
+                  dadosLista={["Dinheiro", "Cartao"]}
                   valor={metodoGasto}
                   onChange={(e) => setMetodoGasto(e.target.value)}
                 />
@@ -256,11 +364,13 @@ function Gastos() {
 
             <div className='formRow'>
               <div className='formInputDiv'>
-                <label htmlFor="categoriaGasto">Categoria</label>
-                <Input
-                  tipoInput='text'
-                  idInput='categoriaGasto'
-                  nameInput='Categoria Gasto'
+                <label htmlFor="categoriaGastoo">Categoria</label>
+                <DataList
+                  listName="listaCategorias"
+                  tipo=""
+                  idInput="categoriaGastoo"
+                  nameInput="Categoria Gasto"
+                  dadosLista={["Alimentação", "Hospedagem", "Passagens", "Passeios", "Souvenirs", "Transporte"]}
                   valor={categoriaGasto}
                   onChange={(e) => setCategoriaGasto(e.target.value)}
                 />
@@ -269,10 +379,10 @@ function Gastos() {
 
             <div className='formRow'>
               <div className='formInputDiv'>
-                <label htmlFor="descricaoGasto">Descrição</label>
+                <label htmlFor="descricaoGastoo">Descrição</label>
                 <Input
                   tipoInput='text'
-                  idInput='descricaoGasto'
+                  idInput='descricaoGastoo'
                   nameInput='Descrição Gasto'
                   valor={descricaoGasto}
                   onChange={(e) => setDescricaoGasto(e.target.value)}
@@ -282,24 +392,27 @@ function Gastos() {
 
             <div className='formRow'>
               <div className='formInputDiv'>
-                <label htmlFor="valorGasto">Valor</label>
-                <Input
-                  tipoInput='text'
-                  idInput='valorGasto'
-                  nameInput='Valor Gasto'
-                  valor={valorGasto}
-                  onChange={(e) => setValorGasto(e.target.value)}
+                <label htmlFor="moedaGastoo">Moeda</label>
+                <DataList
+                  listName="listaMoedas"
+                  tipo="moedasGasto"
+                  idInput='moedaGastoo'
+                  nameInput='Moeda Gasto'
+                  dadosLista={cotacoesUser}
+                  valor={moedaGasto}
+                  onChange={(e) => setMoedaGasto(e.target.value)}
                 />
               </div>
 
               <div className='formInputDiv'>
-                <label htmlFor="moedaGasto">Moeda</label>
+                <label htmlFor="valorGastoo">Valor</label>
                 <Input
-                  tipoInput='text'
-                  idInput='moedaGasto'
-                  nameInput='Moeda Gasto'
-                  valor={moedaGasto}
-                  onChange={(e) => setMoedaGasto(e.target.value)}
+                  tipoInput='number'
+                  idInput='valorGastoo'
+                  nameInput='Valor Gasto'
+                  valor={valorGasto}
+                  onChange={(e) => setValorGasto(e.target.value)}
+                  isDisabled={liberarValor}
                 />
               </div>
             </div>

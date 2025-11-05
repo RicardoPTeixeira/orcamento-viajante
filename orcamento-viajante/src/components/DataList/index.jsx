@@ -11,6 +11,8 @@ function DataList(infos) {
             return <option value={e.countryName}></option>
           } else if (infos.tipo == 'cidades'){
             return <option value={e.name}></option>
+          } else if(infos.tipo == 'moedasGasto') {
+            return <option value={e.moeda}></option>
           } else {
             return <option value={e}></option>
           }
