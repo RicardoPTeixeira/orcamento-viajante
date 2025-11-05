@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom';
 
 import { db, auth } from '../../firebase';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore';
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
@@ -23,7 +23,8 @@ function Limites() {
   const [souvenirs, setSouvenirs] = useState(0);
   const [limiteTotal, setLimiteTotal] = useState(0);
 
-  const [totalGasto, setTotalGasto] = useState(130);
+  const [dataGastos, setDataGastos] = useState('')
+  const [totalGasto, setTotalGasto] = useState(0);
   const [statusGasto, setStatusGasto] = useState('normal')
   const [porcentagemGasta, setPorcentagemGasta] = useState(0)
 
@@ -48,6 +49,21 @@ function Limites() {
       console.error("Erro ao processar documento:", e);
     }
   }
+
+  const fetchDataGastos = async () => {
+    try {
+      const gastosRef  = collection(db, 'orcamento-viajante', auth.currentUser.email, 'viagens', idTravel, 'gastos');
+      const querySnapshot = await getDocs(gastosRef);
+
+      const gastos = [];
+      querySnapshot.forEach((doc) => {
+        gastos.push({ id: doc.id, ...doc.data() });
+      });
+      setDataGastos(gastos)
+    } catch (e) {
+      console.error("Erro ao buscar gastos:", e);
+    }
+  };
 
   function handleSave(e) {
     e.preventDefault();
@@ -110,8 +126,31 @@ function Limites() {
     const timer = setTimeout(() => {
       const usuarioLogado = auth.currentUser.email;
       fetchDataLimites(usuarioLogado, idTravel)
+      fetchDataGastos()
     }, 2000);
   }, []);
+
+  useEffect(() => {
+    if(dataGastos.length > 0) {
+      var acumulador = 0
+      for (let i = 0; i < dataGastos.length; i++) {
+        const element = dataGastos[i];
+        acumulador += parseFloat(element.valorBRL)
+      }
+      setTotalGasto(acumulador)
+      const porcentagemGasta = limiteTotal > 0
+        ? (acumulador / limiteTotal) * 100
+        : 0;
+      setPorcentagemGasta(porcentagemGasta)
+      if(acumulador <= (limiteTotal/2)) {
+        setStatusGasto('normal')
+      } else if(acumulador > (limiteTotal/2) && acumulador < limiteTotal) {
+        setStatusGasto('warning')
+      } else {
+        setStatusGasto('limit')
+      }
+    }
+  }, [dataGastos]);
 
   if (loading) { return <div>Carregando...</div>; }
 
