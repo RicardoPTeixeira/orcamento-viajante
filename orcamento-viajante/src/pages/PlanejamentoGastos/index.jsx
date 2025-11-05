@@ -39,7 +39,7 @@ function PlanejamentoGastos() {
 
       await setDoc(viagemRef, dadosPlanejados, { merge: true });
       console.log("Documento atualizado ou criado com sucesso!");
-      window.location.href = '/menu?'+idTravel
+      window.location.href = '/menu?idTravel='+idTravel
     } catch (e) {
       console.error("Erro ao processar documento:", e);
     }
