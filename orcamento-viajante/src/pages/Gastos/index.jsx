@@ -97,7 +97,7 @@ function Gastos() {
       moeda: moedaGasto,
     };
 
-    const idGasto = "gasto-"+(dataGastos.length+1)
+    const idGasto = dataGastos.length < 9 ? "gasto-0"+(dataGastos.length+1) : "gasto-"+(dataGastos.length+1)
 
     try {
       const usuarioLogado = auth.currentUser.email;
