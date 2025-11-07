@@ -6,6 +6,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
+import Loading from '../../components/Loading'
 
 import './planejamentoGastos.css'
 
@@ -83,7 +84,7 @@ function PlanejamentoGastos() {
     }, 2000);
   }, []);
 
-  if (loading) { return <div>Carregando...</div>; }
+  if (loading) { return <Loading />; }
 
   return (
     <section className='section limite-gastos'>

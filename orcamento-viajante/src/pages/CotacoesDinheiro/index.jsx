@@ -10,6 +10,7 @@ import Input from "../../components/Input"
 import DataList from "../../components/DataList"
 import CoinBox from "../../components/CoinBox"
 import CoinBoxAmount from "../../components/CoinBoxAmount"
+import Loading from '../../components/Loading'
 
 import "./cotacoesDinheiro.css"
 
@@ -306,7 +307,7 @@ function CotacoesDinheiro() {
     setValor2Compra(Number(e.target.value) || 0);
   };
 
-  if (loading) { return <div>Carregando...</div>; }
+  if (loading) { return <Loading />; }
   return (
     <>
       <section className='section cotacoesDinheiro'>

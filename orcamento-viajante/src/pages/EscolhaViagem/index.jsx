@@ -6,6 +6,7 @@ import { auth } from '../../firebase';
 
 import './escolha-viagem.css'
 import TravelSquare from '../../components/TravelSquare'
+import Loading from '../../components/Loading'
 
 function EscolhaViagem() {
   const [data, setData] = useState([]);
@@ -46,7 +47,7 @@ function EscolhaViagem() {
     window.location.href = data.length < 9 ? '/adicionar-viagem?idNewTravel=0'+(data.length+1) : '/adicionar-viagem?idNewTravel='+(data.length+1)
   }
 
-  if (loading) { return <div>Carregando...</div>; }
+  if (loading) { return <Loading />; }
   return (
     <section className='section escolhaViagem'>
       Bem vindo {nomeUser}

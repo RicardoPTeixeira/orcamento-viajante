@@ -8,6 +8,7 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 import GastoCard from '../../components/GastoCard'
 import DataList from '../../components/DataList'
+import Loading from '../../components/Loading'
 
 import './gastos.css'
 
@@ -198,7 +199,7 @@ function Gastos() {
     }
   }, [valorGasto]);
 
-  if (loading) { return <div>Carregando...</div>; }
+  if (loading) { return <Loading />; }
 
   return (
     <>

@@ -7,6 +7,7 @@ import { doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore';
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 import ProgressBar from '../../components/ProgressBar'
+import Loading from '../../components/Loading'
 
 import './limites.css'
 
@@ -152,7 +153,7 @@ function Limites() {
     }
   }, [dataGastos]);
 
-  if (loading) { return <div>Carregando...</div>; }
+  if (loading) { return <Loading />; }
 
   return (
     <section className='section limites'>
