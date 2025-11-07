@@ -11,6 +11,7 @@ import DataList from "../../components/DataList"
 import CoinBox from "../../components/CoinBox"
 import CoinBoxAmount from "../../components/CoinBoxAmount"
 import Loading from '../../components/Loading'
+import BreadCrumbs from '../../components/BreadCrumbs'
 
 import "./cotacoesDinheiro.css"
 
@@ -310,6 +311,7 @@ function CotacoesDinheiro() {
   if (loading) { return <Loading />; }
   return (
     <>
+      <BreadCrumbs pagAtual="Cotações e dinheiro fisico" />
       <section className='section cotacoesDinheiro'>
         <div className='square'>
           <div className='infos'>

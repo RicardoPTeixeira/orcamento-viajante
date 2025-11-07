@@ -8,6 +8,7 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 import ProgressBar from '../../components/ProgressBar'
 import Loading from '../../components/Loading'
+import BreadCrumbs from '../../components/BreadCrumbs';
 
 import './limites.css'
 
@@ -156,86 +157,89 @@ function Limites() {
   if (loading) { return <Loading />; }
 
   return (
-    <section className='section limites'>
-      <div className='numbers'>
-        <div className={'gasto ' + statusGasto}>
-          <p>Total gasto</p>
-          <div className='value'>
-            <p>R$</p>
-            <p>{totalGasto}</p>
+    <>
+      <BreadCrumbs pagAtual="Cotações e dinheiro fisico" />
+      <section className='section limites'>
+        <div className='numbers'>
+          <div className={'gasto ' + statusGasto}>
+            <p>Total gasto</p>
+            <div className='value'>
+              <p>R$</p>
+              <p>{totalGasto}</p>
+            </div>
+          </div>
+
+          <div className='limiteTotal'>
+            <p>Limite total</p>
+            <div className='value'>
+              <p>R$</p>
+              <p>{limiteTotal}</p>
+            </div>
           </div>
         </div>
+        <ProgressBar progresso={porcentagemGasta} />
 
-        <div className='limiteTotal'>
-          <p>Limite total</p>
-          <div className='value'>
-            <p>R$</p>
-            <p>{limiteTotal}</p>
-          </div>
+        <div className='inputs'>
+          <div></div>
+          <label htmlFor="passagens">Passagens</label>
+          <Input
+            tipoInput='number'
+            idInput='passagens'
+            nameInput='passagens'
+            valor={passagens}
+            onChange={(e) => setPassagens(Number(e.target.value))}
+          />
+
+          <label htmlFor="hospedagem">Hospedagem</label>
+          <Input
+            tipoInput='number'
+            idInput='hospedagem'
+            nameInput='hospedagem'
+            valor={hospedagem}
+            onChange={(e) => setHospedagem(Number(e.target.value))}
+          />
+
+          <label htmlFor="alimentacao">Alimentação</label>
+          <Input
+            tipoInput='number'
+            idInput='alimentacao'
+            nameInput='alimentacao'
+            valor={alimentacao}
+            onChange={(e) => setAlimentacao(Number(e.target.value))}
+          />
+
+          <label htmlFor="passeios">Passeios</label>
+          <Input
+            tipoInput='number'
+            idInput='passeios'
+            nameInput='passeios'
+            valor={passeios}
+            onChange={(e) => setPasseios(Number(e.target.value))}
+          />
+
+          <label htmlFor="transporte">Transporte</label>
+          <Input
+            tipoInput='number'
+            idInput='transporte'
+            nameInput='transporte'
+            valor={transporte}
+            onChange={(e) => setTransporte(Number(e.target.value))}
+          />
+
+          <label htmlFor="souvenirs">Souvenirs</label>
+          <Input
+            tipoInput='number'
+            idInput='souvenirs'
+            nameInput='souvenirs'
+            valor={souvenirs}
+            onChange={(e) => setSouvenirs(Number(e.target.value))}
+          />
         </div>
-      </div>
-      <ProgressBar progresso={porcentagemGasta} />
 
-      <div className='inputs'>
-        <div></div>
-        <label htmlFor="passagens">Passagens</label>
-        <Input
-          tipoInput='number'
-          idInput='passagens'
-          nameInput='passagens'
-          valor={passagens}
-          onChange={(e) => setPassagens(Number(e.target.value))}
-        />
-
-        <label htmlFor="hospedagem">Hospedagem</label>
-        <Input
-          tipoInput='number'
-          idInput='hospedagem'
-          nameInput='hospedagem'
-          valor={hospedagem}
-          onChange={(e) => setHospedagem(Number(e.target.value))}
-        />
-
-        <label htmlFor="alimentacao">Alimentação</label>
-        <Input
-          tipoInput='number'
-          idInput='alimentacao'
-          nameInput='alimentacao'
-          valor={alimentacao}
-          onChange={(e) => setAlimentacao(Number(e.target.value))}
-        />
-
-        <label htmlFor="passeios">Passeios</label>
-        <Input
-          tipoInput='number'
-          idInput='passeios'
-          nameInput='passeios'
-          valor={passeios}
-          onChange={(e) => setPasseios(Number(e.target.value))}
-        />
-
-        <label htmlFor="transporte">Transporte</label>
-        <Input
-          tipoInput='number'
-          idInput='transporte'
-          nameInput='transporte'
-          valor={transporte}
-          onChange={(e) => setTransporte(Number(e.target.value))}
-        />
-
-        <label htmlFor="souvenirs">Souvenirs</label>
-        <Input
-          tipoInput='number'
-          idInput='souvenirs'
-          nameInput='souvenirs'
-          valor={souvenirs}
-          onChange={(e) => setSouvenirs(Number(e.target.value))}
-        />
-      </div>
-
-      <Button texto='Salvar' onClick={handleSave}/>
-      
-    </section>
+        <Button texto='Salvar' onClick={handleSave}/>
+        
+      </section>
+    </>
   )
 }
 

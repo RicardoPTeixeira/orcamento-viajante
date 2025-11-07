@@ -9,6 +9,7 @@ import Button from '../../components/Button'
 import GastoCard from '../../components/GastoCard'
 import DataList from '../../components/DataList'
 import Loading from '../../components/Loading'
+import BreadCrumbs from '../../components/BreadCrumbs';
 
 import './gastos.css'
 
@@ -203,6 +204,7 @@ function Gastos() {
 
   return (
     <>
+      <BreadCrumbs pagAtual="Gastos" />
       <section className='section gastos'>
         <div className='cardsSections'>
           {dataGastos.map((e) => {
