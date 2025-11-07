@@ -282,7 +282,6 @@ function CotacoesDinheiro() {
 
   useEffect(() => {
     if(lastChanged === 'valor1' && valor1Compra != 0) {
-      console.log('entrou 1')
       var objetoMoeda = cotacoesUser.find(item => item.moeda === moeda2Compra);
       var valorNovaMoeda = (valor1Compra/objetoMoeda.valorEmReal).toFixed(2)
       setValor2Compra(valorNovaMoeda)
@@ -291,7 +290,6 @@ function CotacoesDinheiro() {
 
   useEffect(() => {
     if(lastChanged === 'valor2' && valor2Compra != 0) {
-      console.log('entrou 2')
       var objetoMoeda = cotacoesUser.find(item => item.moeda === moeda2Compra);
       var valorNovaMoeda = (valor2Compra*objetoMoeda.valorEmReal).toFixed(2)
       setValor1Compra(valorNovaMoeda)
