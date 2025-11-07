@@ -26,6 +26,8 @@ function CotacoesDinheiro() {
   const [valor1Compra, setValor1Compra] = useState(0);
   const [moeda2Compra, setMoeda2Compra] = useState('');
   const [valor2Compra, setValor2Compra] = useState(0);
+  const [liberarValores, setLiberarValores] = useState(true);
+  const [lastChanged, setLastChanged] = useState(null);
   // --
 
   // Pegar compras de moedas
@@ -270,6 +272,42 @@ function CotacoesDinheiro() {
     }, 2000);
   }, [moedas]);
 
+  useEffect(() => {
+    if(moeda2Compra != '') {
+      setLiberarValores(false)
+    } else {
+      setLiberarValores(true)
+    }
+  }, [moeda2Compra]);
+
+  useEffect(() => {
+    if(lastChanged === 'valor1' && valor1Compra != 0) {
+      console.log('entrou 1')
+      var objetoMoeda = cotacoesUser.find(item => item.moeda === moeda2Compra);
+      var valorNovaMoeda = (valor1Compra/objetoMoeda.valorEmReal).toFixed(2)
+      setValor2Compra(valorNovaMoeda)
+    }
+  }, [valor1Compra]);
+
+  useEffect(() => {
+    if(lastChanged === 'valor2' && valor2Compra != 0) {
+      console.log('entrou 2')
+      var objetoMoeda = cotacoesUser.find(item => item.moeda === moeda2Compra);
+      var valorNovaMoeda = (valor2Compra*objetoMoeda.valorEmReal).toFixed(2)
+      setValor1Compra(valorNovaMoeda)
+    }
+  }, [valor2Compra]);
+
+  const handleValor1Change = (e) => {
+    setLastChanged('valor1');
+    setValor1Compra(Number(e.target.value) || 0);
+  };
+
+  const handleValor2Change = (e) => {
+    setLastChanged('valor2');
+    setValor2Compra(Number(e.target.value) || 0);
+  };
+
   if (loading) { return <div>Carregando...</div>; }
   return (
     <>
@@ -415,7 +453,8 @@ function CotacoesDinheiro() {
                     idInput='valor1Compra'
                     nameInput='Valor 1'
                     valor={valor1Compra}
-                    onChange={(e) => setValor1Compra(e.target.value)}
+                    onChange={handleValor1Change}
+                    isDisabled={liberarValores}
                   />
                 </div>
                 <div className='formInputDiv'>
@@ -425,7 +464,8 @@ function CotacoesDinheiro() {
                     idInput='valor2Compra'
                     nameInput='Valor 2'
                     valor={valor2Compra}
-                    onChange={(e) => setValor2Compra(e.target.value)}
+                    onChange={handleValor2Change}
+                    isDisabled={liberarValores}
                   />
                 </div>
               </div>
