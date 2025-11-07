@@ -12,6 +12,7 @@ import CoinBox from "../../components/CoinBox"
 import CoinBoxAmount from "../../components/CoinBoxAmount"
 import Loading from '../../components/Loading'
 import BreadCrumbs from '../../components/BreadCrumbs'
+import CompraDinheiro from '../../components/CompraDinheiro';
 
 import "./cotacoesDinheiro.css"
 
@@ -31,10 +32,13 @@ function CotacoesDinheiro() {
   const [liberarValores, setLiberarValores] = useState(true);
   const [lastChanged, setLastChanged] = useState(null);
   // --
+  
 
   // Pegar compras de moedas
   const [dataComprasDinheiro, setDataComprasDinheiro] = useState([]);
   const [totalPorMoeda, setTotalPorMoeda] = useState([]);
+  const [totalPorMoedaHelper, setTotalPorMoedaHelper] = useState([]);
+  const [totalPorMoedaSemGasto, setTotalPorMoedaSemGasto] = useState([]);
 
   useEffect(() => {
     const totaisAcumulados = {};
@@ -59,8 +63,61 @@ function CotacoesDinheiro() {
     }));
 
     setTotalPorMoeda(resultadoFinal)
+    setTotalPorMoedaHelper(resultadoFinal)
+    setTotalPorMoedaSemGasto(resultadoFinal)
 
   }, [dataComprasDinheiro]);
+
+  // --
+
+  // Pegar gastos
+  const [dataGastos, setDataGastos] = useState('')
+
+  const fetchDataGastos = async () => {
+    try {
+      const gastosRef  = collection(db, 'orcamento-viajante', auth.currentUser.email, 'viagens', idTravel, 'gastos');
+      const querySnapshot = await getDocs(gastosRef);
+
+      const gastos = [];
+      querySnapshot.forEach((doc) => {
+        gastos.push({ id: doc.id, ...doc.data() });
+      });
+      setDataGastos(gastos)
+    } catch (e) {
+      console.error("Erro ao buscar gastos:", e);
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchDataGastos()
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    if(dataGastos.length > 0 && totalPorMoedaHelper.length > 0) {
+      const totaisAcumulados = {};
+      for (let x = 0; x < totalPorMoeda.length; x++) {
+        const elementX = totalPorMoeda[x];
+        var acumulador = 0
+        for (let i = 0; i < dataGastos.length; i++) {
+          const elementI = dataGastos[i];
+          if(elementX.moeda == elementI.moeda && elementI.metodo == "Dinheiro") {
+            acumulador += parseFloat(elementI.valor)
+          }
+        }
+        totaisAcumulados[elementX.moeda] = elementX.total-acumulador;
+      }
+
+      const resultadoFinal = Object.keys(totaisAcumulados).map(moeda => ({
+        moeda: moeda,
+        total: totaisAcumulados[moeda]
+      }));
+
+      setTotalPorMoeda(resultadoFinal)
+      
+    }
+  }, [dataGastos, totalPorMoedaHelper]);
 
   // --
 
@@ -329,7 +386,7 @@ function CotacoesDinheiro() {
 
         <div className='square'>
           <div className='infos'>
-            <p>Dinheiro fisico:</p>
+            <p>Dinheiro fisico disponivel:</p>
 
             <div className='moedas'>
               {totalPorMoeda.map((e) => {
@@ -341,6 +398,22 @@ function CotacoesDinheiro() {
           <Button texto="Adicionar nova compra de dinheiro" onClick={handleClickDinheiro} />
         </div>
 
+        <div className='square'>
+          <div className='infos'>
+            <p>Compras de dinheiro fisico:</p>
+
+            <div className='moedas'>
+              {totalPorMoedaSemGasto.map((e) => {
+                return <CoinBoxAmount nome={e.moeda} total={e.total} />
+              })}
+
+              {dataComprasDinheiro.map((e) => {
+                return <CompraDinheiro data={e.data} moedaComprada={e.moedaComprada} valorMoedaComprada={e.valorMoedaComprada} valorBRL={e.valorBRL} /> 
+              })}
+
+            </div>
+          </div>
+        </div>
         
       </section>
 

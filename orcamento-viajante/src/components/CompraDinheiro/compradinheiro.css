@@ -1,0 +1,16 @@
+.compraDinheiro {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.compraDinheiro div {
+    display: flex;
+    width: 33.3%;
+    justify-content: flex-end;
+}
+
+.compraDinheiro div:first-child {
+    justify-content: flex-start;
+}
