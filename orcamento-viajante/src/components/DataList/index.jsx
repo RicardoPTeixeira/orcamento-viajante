@@ -6,15 +6,15 @@ function DataList(infos) {
       <input list={infos.listName} id={infos.idInput} name={infos.nameInput} className='dataList' value={infos.valor} onChange={infos.onChange} />
 
       <datalist id={infos.listName}>
-        {infos.dadosLista.map((e) => {
+        {infos.dadosLista.map((e, index) => {
           if(infos.tipo == 'paises') {
-            return <option value={e.countryName}></option>
+            return <option value={e.countryName} key={index}></option>
           } else if (infos.tipo == 'cidades'){
-            return <option value={e.name}></option>
+            return <option value={e.name} key={index}></option>
           } else if(infos.tipo == 'moedasGasto') {
-            return <option value={e.moeda}></option>
+            return <option value={e.moeda} key={index}></option>
           } else {
-            return <option value={e}></option>
+            return <option value={e} key={index}></option>
           }
           
         })}

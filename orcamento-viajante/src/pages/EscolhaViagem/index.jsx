@@ -51,7 +51,7 @@ function EscolhaViagem() {
   return (
     <section className='section escolhaViagem'>
       Bem vindo {nomeUser}
-      {data.map((dado, index) => <TravelSquare cidade={dado.cidade} pais={dado.pais} index={index}/>)}
+      {data.map((dado, index) => <TravelSquare cidade={dado.cidade} pais={dado.pais} index={index} key={index}/>)}
 
       <div className='addNewTravel' onClick={createNewTravel}>
         <span>

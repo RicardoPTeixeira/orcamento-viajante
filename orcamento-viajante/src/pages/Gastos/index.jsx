@@ -207,8 +207,8 @@ function Gastos() {
       <BreadCrumbs pagAtual="Gastos" />
       <section className='section gastos'>
         <div className='cardsSections'>
-          {dataGastos.map((e) => {
-            return <GastoCard titulo={e.titulo} categoria={e.categoria} data={e.data} tipo={e.metodo} valorMoeda1={e.valor} moeda1={e.moeda} valorMoeda2={e.valorBRL} moeda2="BRL" />
+          {dataGastos.map((e, index) => {
+            return <GastoCard titulo={e.titulo} categoria={e.categoria} data={e.data} tipo={e.metodo} valorMoeda1={e.valor} moeda1={e.moeda} valorMoeda2={e.valorBRL} moeda2="BRL" key={index} />
           })}
         </div>
         <Button texto="Adicionar" onClick={handleClickModal} />

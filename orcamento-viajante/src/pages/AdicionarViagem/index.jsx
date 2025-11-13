@@ -222,8 +222,8 @@ function AdicionarViagem() {
       </div>
 
       <div className='moedas'>
-        {moedas.map((e) => {
-          return <p>{e}</p>
+        {moedas.map((e, index) => {
+          return <p key={index}>{e}</p>
         })}
       </div>
 

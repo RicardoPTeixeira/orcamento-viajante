@@ -375,8 +375,8 @@ function CotacoesDinheiro() {
             <p>Cotações:</p>
 
             <div className='moedas'>
-              {cotacoesUser.map((e) => {
-                return <CoinBox nome={e.moeda} value={e.valorEmReal} />
+              {cotacoesUser.map((e, index) => {
+                return <CoinBox nome={e.moeda} value={e.valorEmReal} key={index} />
               })}
             </div>
           </div>
@@ -389,8 +389,8 @@ function CotacoesDinheiro() {
             <p>Dinheiro fisico disponivel:</p>
 
             <div className='moedas'>
-              {totalPorMoeda.map((e) => {
-                return <CoinBoxAmount nome={e.moeda} total={e.total} />
+              {totalPorMoeda.map((e, index) => {
+                return <CoinBoxAmount nome={e.moeda} total={e.total} key={index} />
               })}
             </div>
           </div>
@@ -403,12 +403,12 @@ function CotacoesDinheiro() {
             <p>Compras de dinheiro fisico:</p>
 
             <div className='moedas'>
-              {totalPorMoedaSemGasto.map((e) => {
-                return <CoinBoxAmount nome={e.moeda} total={e.total} />
+              {totalPorMoedaSemGasto.map((e, index) => {
+                return <CoinBoxAmount nome={e.moeda} total={e.total} key={index} />
               })}
 
-              {dataComprasDinheiro.map((e) => {
-                return <CompraDinheiro data={e.data} moedaComprada={e.moedaComprada} valorMoedaComprada={e.valorMoedaComprada} valorBRL={e.valorBRL} /> 
+              {dataComprasDinheiro.map((e, index) => {
+                return <CompraDinheiro data={e.data} moedaComprada={e.moedaComprada} valorMoedaComprada={e.valorMoedaComprada} valorBRL={e.valorBRL} key={index}/> 
               })}
 
             </div>
