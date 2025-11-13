@@ -1,0 +1,73 @@
+.tableGastos {
+    width: 100%;
+}
+
+.tableGastos .filterSelect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 20px;
+}
+
+.tableGastos .filterSelect label, .tableGastos .filterSelect select {
+    width: 50%;
+    height: 30px;
+    text-align: center;
+}
+
+.tableGastos .filterSelect select {
+    background-color: #BCE5FF;
+    color: black;
+    border: none;
+    border-radius: 15px;
+}
+
+.tableGastos .headerTable {
+    background-color: #FFC557;
+}
+
+.tableGastos .headerTable .headerItem {
+    cursor: pointer;
+}
+
+.tableGastos .rowData:nth-child(odd) {
+    background-color: #2C82B5;
+}
+
+.tableGastos .rowData:nth-child(even) {
+    background-color: #015C91;
+}
+
+.tableGastos .rowMoreInfo:nth-child(odd) {
+    background-color: #015C91;
+}
+
+.tableGastos .rowMoreInfo:nth-child(even) {
+    background-color: #2C82B5;
+}
+
+.tableGastos .moreInfo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tableGastos td {
+    border: none;
+    text-align: center;
+}
+
+.tableGastos .lastChild {
+    position: relative;
+}
+
+.tableGastos .lastChild span {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.tableGastos .lastChildActive span {
+    transform: rotate(180deg) translateY(50%);
+}
