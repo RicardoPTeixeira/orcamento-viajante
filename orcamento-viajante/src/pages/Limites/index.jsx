@@ -154,6 +154,11 @@ function Limites() {
     }
   }, [dataGastos]);
 
+  useEffect(() => {
+    const soma = Number(passagens) + Number(hospedagem) + Number(alimentacao) + Number(passeios) + Number(transporte) + Number(souvenirs)
+    setLimiteTotal(soma)
+  }, [passagens, hospedagem, alimentacao, passeios, transporte, souvenirs]);
+
   if (loading) { return <Loading />; }
 
   return (

@@ -84,6 +84,11 @@ function PlanejamentoGastos() {
     }, 2000);
   }, []);
 
+  useEffect(() => {
+    const soma = Number(passagens) + Number(hospedagem) + Number(alimentacao) + Number(passeios) + Number(transporte) + Number(souvenirs)
+    setPlanejamentoTotal(soma)
+  }, [passagens, hospedagem, alimentacao, passeios, transporte, souvenirs]);
+
   if (loading) { return <Loading />; }
 
   return (
