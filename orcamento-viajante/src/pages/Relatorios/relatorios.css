@@ -1,5 +1,6 @@
 .relatorios {
     margin-top: 20px;
+    padding-bottom: 20px;
 }
 
 .relatorios .grafico, .relatorios .gastos {
@@ -12,4 +13,10 @@
 .relatorios .grafico h3, .relatorios .gastos h3 {
     font-size: 26px;
     font-weight: 400;
+}
+
+@media(min-width: 1024px) {
+    .relatorios .grafico {
+        height: 500px;
+    }
 }
