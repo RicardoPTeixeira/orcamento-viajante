@@ -313,7 +313,7 @@ function Gastos() {
         </div>
       </section>
 
-      <div className={modal ? 'modalBackdrop modalBackdropActive' : 'modalBackdrop'}>
+      <div className={modal ? 'modalBackdropGasto modalBackdropGastoActive' : 'modalBackdropGasto'}>
         <div className='modalGastos'>
           <div className='firstLine'>
             <p>Adicionar gasto</p>
